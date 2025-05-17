@@ -1,0 +1,72 @@
+.dashboard-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .dashboard-heading {
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .dashboard-card {
+    background-color: white;
+    margin: 80px auto 40px; /* TOP margin increased to 80px */
+    padding: 30px;
+    max-width: 1200px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .username {
+    font-weight: normal;
+    margin-left: 8px;
+  }
+  
+  .dashboard-content {
+    display: flex;
+    margin-top: 20px;
+    gap: 20px;
+  }
+  
+  /* Profile Section */
+  .profile-box {
+    border: 3px solid green;
+    padding: 15px;
+    width: 300px;
+  }
+  
+  .profile-photo {
+    border: 3px solid green;
+    height: 200px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  /* Courses Section */
+  .courses-box {
+    border: 3px solid green;
+    padding: 15px;
+    flex: 1;
+  }
+  
+  .course-card {
+    border: 3px solid green;
+    padding: 10px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .course-card h4 {
+    margin: 0 0 5px 0;
+  }
+  
+  .instructor-name {
+    align-self: flex-start;
+    font-size: 14px;
+    color: #1d6322;
+  }
+  

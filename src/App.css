@@ -1,0 +1,37 @@
+/* App.css */
+
+.header {
+  background-color: #e8f5e9;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: #2e7d32;
+}
+
+.nav-link {
+  margin: 0 15px;
+  text-decoration: none;
+  color: #2e7d32;
+  font-weight: bold;
+}
+
+.faded-background {
+  background-image: url("./assets/ivybg.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 100vh;
+}

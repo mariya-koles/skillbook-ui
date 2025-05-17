@@ -1,0 +1,65 @@
+/* Home.css */
+
+.home-container {
+    background-image: url("https://images.unsplash.com/photo-1496309732348-3627f3f040ee?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80");
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+  }
+  
+  .home-overlay {
+    background-color: rgba(255, 255, 255, 0.85);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+  }
+  
+  .home-hero {
+    background-color: #ffffff;
+    padding: 3rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    max-width: 700px;
+    text-align: center;
+  }
+  
+  .home-heading {
+    font-size: 2.8rem;
+    color: #2e7d32;
+    margin-bottom: 1rem;
+  }
+  
+  .home-brand {
+    color: #558b2f;
+    font-weight: bold;
+  }
+  
+  .home-subtext {
+    font-size: 1.2rem;
+    color: #3c4d3b;
+    margin-top: 0.5rem;
+  }
+  
+  .home-button {
+    margin-top: 2rem;
+    padding: 0.8rem 2rem;
+    background-color: #a5d6a7;
+    border: none;
+    border-radius: 8px;
+    color: #2e7d32;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease;
+  }
+  
+  .home-backend-message {
+    margin-top: 2rem;
+    font-style: italic;
+    color: #558b2f;
+    font-size: 1rem;
+  }
+  
