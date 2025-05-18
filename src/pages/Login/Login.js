@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import '../../styles/shared.css';
 import './Login.css';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -20,6 +21,9 @@ const Login = () => {
             [name]: value
         }));
     };
+
+    const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -55,7 +59,7 @@ const Login = () => {
 
     return (
         <div className="page-container">
-            <div className="content-card">
+            <div className="login-card">
                 <h2>Welcome Back!</h2>
                 {error && <div className="error-message">{error}</div>}
                 
@@ -72,17 +76,26 @@ const Login = () => {
                         />
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group password-group">
                         <label htmlFor="password">Password</label>
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            required
-                        />
+                        <div className="password-wrapper">
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                id="password"
+                                name="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                required
+                            />
+                            <span
+                                className="toggle-password"
+                                onClick={() => setShowPassword(prev => !prev)}
+                            >
+                                {showPassword ? <FaEye /> : <FaEyeSlash />}
+                            </span>
+                        </div>
                     </div>
+
 
                     <button type="submit" className="primary-button">
                         Log In

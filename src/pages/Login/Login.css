@@ -10,6 +10,23 @@
     background: linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3));
 }
 
+/* Card */
+.login-card {
+    background: var(--white);
+    padding: var(--spacing-xl);
+    border-radius: 10px;
+    box-shadow: var(--card-shadow);
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-card h2 {
+    text-align: center;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-lg);
+}
+
+
 .login-form {
     background: white;
     padding: 2.5rem 3rem;
@@ -94,5 +111,24 @@
 
 .register-link:hover {
     color: #66bb6a;
+}
+
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 2.5rem;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 0.75rem;
+    cursor: pointer;
+    color: #718096;
+    font-size: 1.2rem;
 }
   
