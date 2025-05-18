@@ -113,22 +113,4 @@
     color: #66bb6a;
 }
 
-.password-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.password-wrapper input {
-    width: 100%;
-    padding-right: 2.5rem;
-}
-
-.toggle-password {
-    position: absolute;
-    right: 0.75rem;
-    cursor: pointer;
-    color: #718096;
-    font-size: 1.2rem;
-}
   

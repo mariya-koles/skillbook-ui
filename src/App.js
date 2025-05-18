@@ -1,38 +1,12 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Dashboard from "./pages/Dashboard/Dashboard";
-import { AuthProvider, useAuth } from "./context/AuthContext";
+import Navigation from "./components/Navigation/Navigation";
+import { AuthProvider } from "./context/AuthContext";
 import "./App.css";
-
-const Navigation = () => {
-  const { user } = useAuth();
-
-  return (
-    <header className="header">
-      <nav className="navbar">
-        <div className="logo">Skillbook</div>
-        <div>
-          <Link className="nav-link" to="/">Home</Link>
-          {user ? (
-            <>
-              <Link className="nav-link" to="/dashboard">Dashboard</Link>
-              <Link className="nav-link" to="/courses">Courses</Link>
-            </>
-          ) : (
-            <>
-              <Link className="nav-link" to="/login">Login</Link>
-              <Link className="nav-link" to="/register">Register</Link>
-              <Link className="nav-link" to="/courses">Courses</Link>
-            </>
-          )}
-        </div>
-      </nav>
-    </header>
-  );
-};
 
 function App() {
   return (

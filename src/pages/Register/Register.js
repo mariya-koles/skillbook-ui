@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/shared.css';
 import './Register.css';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const Register = () => {
     const navigate = useNavigate();
@@ -13,6 +14,8 @@ const Register = () => {
         role: 'LEARNER'
     });
     const [error, setError] = useState('');
+    const [showPassword, setShowPassword] = useState(false);        
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -32,12 +35,19 @@ const Register = () => {
         }
 
         try {
+            const requestData = {
+                username: formData.username,
+                email: formData.email,
+                password: formData.password,
+                role: formData.role
+            };
+
             const response = await fetch('http://localhost:8080/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(requestData)
             });
 
             const data = await response.text();
@@ -84,29 +94,46 @@ const Register = () => {
                         />
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group password-group">
                         <label htmlFor="password">Password</label>
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            required
-                        />
+                        <div className="password-wrapper">
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                id="password"
+                                name="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                required
+                            />
+                            <span
+                                className="toggle-password"
+                                onClick={() => setShowPassword(prev => !prev)}
+                            >
+                                {showPassword ? <FaEye /> : <FaEyeSlash />}
+                            </span>
+                        </div>
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group password-group">
                         <label htmlFor="confirmPassword">Confirm Password</label>
-                        <input
-                            type="password"
-                            id="confirmPassword"
-                            name="confirmPassword"
-                            value={formData.confirmPassword}
-                            onChange={handleChange}
-                            required
-                        />
+                        <div className="password-wrapper">
+                            <input
+                                type={showConfirmPassword ? "text" : "password"}
+                                id="confirmPassword"
+                                name="confirmPassword"
+                                value={formData.confirmPassword}
+                                onChange={handleChange}
+                                required
+                            />
+                            <span
+                                className="toggle-password"
+                                onClick={() => setShowConfirmPassword(prev => !prev)}
+                            >
+                                {showConfirmPassword ? <FaEye /> : <FaEyeSlash />}
+                            </span>
+                        </div>
                     </div>
+
 
                     <div className="form-group">
                         <label htmlFor="role">I want to register as:</label>
