@@ -1,17 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import "./Home.css";
 
 const Home = () => {
-  const [message, setMessage] = useState("");
   const navigate = useNavigate();
-
-  useEffect(() => {
-    axios.get("http://localhost:8080/api/greeting")
-      .then(res => setMessage(res.data))
-      .catch(err => console.error("API error:", err));
-  }, []);
 
   return (
     <div className="home-container">
@@ -29,7 +21,6 @@ const Home = () => {
           <button className="home-button" onClick={() => navigate("/register")}>
             Get Started
           </button>
-          {message && <p className="home-backend-message">{message}</p>}
         </div>
       </div>
     </div>
