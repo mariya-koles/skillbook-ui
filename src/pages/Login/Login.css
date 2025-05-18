@@ -1,56 +1,98 @@
 /* Login.css */
+/* Page-specific styles can be added here if needed */
 
 .login-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 80vh;
-    background-color: #f0fdf4;
-  }
-  
-  .login-form {
+    min-height: 100vh;
+    padding: 2rem;
+    background: linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3));
+}
+
+.login-form {
     background: white;
     padding: 2.5rem 3rem;
-    border-radius: 10px;
+    border-radius: 15px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 400px;
-    display: flex;
-    flex-direction: column;
-    gap: 1.2rem;
-  }
-  
-  .login-form h2 {
-    color: #2e7d32;
+}
+
+.login-form h2 {
+    color: #333;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+.form-group label {
+    display: block;
     margin-bottom: 0.5rem;
-    text-align: center;
-  }
-  
-  .login-form input {
+    color: #555;
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
     padding: 0.8rem;
-    border-radius: 6px;
-    border: 1px solid #ccc;
+    border-radius: 8px;
+    border: 1px solid #ddd;
     font-size: 1rem;
-  }
-  
-  .login-form button {
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #81c784;
+    box-shadow: 0 0 0 2px rgba(129, 199, 132, 0.2);
+}
+
+.login-button {
+    width: 100%;
     background-color: #81c784;
     color: white;
-    font-weight: bold;
+    font-weight: 600;
     padding: 0.8rem;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background 0.3s ease;
-  }
-  
-  .login-form button:hover {
+    transition: background-color 0.3s ease;
+    margin-top: 1rem;
+}
+
+.login-button:hover {
     background-color: #66bb6a;
-  }
-  
-  .login-error {
-    color: red;
+}
+
+.error-message {
+    color: #d32f2f;
+    background-color: #ffebee;
+    padding: 0.8rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
     text-align: center;
     font-size: 0.9rem;
-  }
+}
+
+.register-prompt {
+    margin-top: 1.5rem;
+    text-align: center;
+    color: #666;
+}
+
+.register-link {
+    color: #81c784;
+    cursor: pointer;
+    font-weight: 500;
+    text-decoration: underline;
+}
+
+.register-link:hover {
+    color: #66bb6a;
+}
   

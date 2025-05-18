@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Role } from '../../models/User';
+import '../../styles/shared.css';
 import './Register.css';
 
 const Register = () => {
@@ -10,107 +10,56 @@ const Register = () => {
         email: '',
         password: '',
         confirmPassword: '',
-        role: Role.LEARNER
+        role: 'LEARNER'
     });
     const [error, setError] = useState('');
-    const mounted = useRef(true);
-
-    useEffect(() => {
-        // Set mounted to true when component mounts
-        mounted.current = true;
-        // Cleanup function to run when component unmounts
-        return () => {
-            mounted.current = false;
-        };
-    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        if (mounted.current) {
-            setFormData(prevState => ({
-                ...prevState,
-                [name]: value
-            }));
-        }
+        setFormData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!mounted.current) return;
-        
+        setError('');
+
         if (formData.password !== formData.confirmPassword) {
             setError('Passwords do not match');
             return;
         }
 
         try {
-            const requestData = {
-                username: formData.username.trim(),
-                email: formData.email.trim(),
-                password: formData.password,
-                role: formData.role.toString()
-            };
-            
-            console.log('Sending registration data:', requestData);
-            
             const response = await fetch('http://localhost:8080/register', {
                 method: 'POST',
-                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json'
                 },
-                body: JSON.stringify(requestData)
+                body: JSON.stringify(formData)
             });
 
-            let errorMessage = '';
-            try {
-                const responseText = await response.text();
-                console.log('Raw server response:', responseText);
+            const data = await response.text();
 
-                if (response.ok) {
-                    if (mounted.current) {
-                        alert('Registration successful! Please log in.');
-                        navigate('/login');
-                    }
-                    return;
-                }
-
-                // Handle error messages
-                if (responseText.includes('Username already exists')) {
-                    errorMessage = 'This username is already taken. Please choose a different username.';
-                    if (mounted.current) {
-                        setFormData(prev => ({
-                            ...prev,
-                            username: ''
-                        }));
-                    }
-                } else {
-                    errorMessage = responseText || 'Registration failed. Please try again.';
-                }
-            } catch (parseError) {
-                console.error('Error parsing response:', parseError);
-                errorMessage = 'Registration failed. Please try again.';
-            }
-
-            if (mounted.current) {
-                setError(errorMessage);
+            if (response.ok) {
+                navigate('/login');
+            } else {
+                setError(data || 'Registration failed. Please try again.');
             }
         } catch (err) {
             console.error('Registration error:', err);
-            if (mounted.current) {
-                setError('Registration failed. Please check your connection and try again.');
-            }
+            setError('Network error occurred. Please try again.');
         }
     };
 
     return (
         <div className="page-container">
-            <div className="content-card narrow">
+            <div className="content-card">
                 <h2>Create Your Account</h2>
-                <form onSubmit={handleSubmit} className="register-form">
+                <form onSubmit={handleSubmit}>
                     {error && <div className="error-message">{error}</div>}
-                    
+
                     <div className="form-group">
                         <label htmlFor="username">Username</label>
                         <input
@@ -168,14 +117,24 @@ const Register = () => {
                             onChange={handleChange}
                             required
                         >
-                            <option value={Role.LEARNER}>Learner</option>
-                            <option value={Role.INSTRUCTOR}>Instructor</option>
+                            <option value="LEARNER">Learner</option>
+                            <option value="INSTRUCTOR">Instructor</option>
                         </select>
                     </div>
 
-                    <button type="submit" className="register-button">
+                    <button type="submit" className="primary-button">
                         Register
                     </button>
+
+                    <p className="text-center mt-1">
+                        Already have an account?{' '}
+                        <span 
+                            className="link-text"
+                            onClick={() => navigate('/login')}
+                        >
+                            Login here
+                        </span>
+                    </p>
                 </form>
             </div>
         </div>

@@ -4,24 +4,42 @@ import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Dashboard from "./pages/Dashboard/Dashboard";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 import "./App.css";
+
+const Navigation = () => {
+  const { user } = useAuth();
+
+  return (
+    <header className="header">
+      <nav className="navbar">
+        <div className="logo">Skillbook</div>
+        <div>
+          <Link className="nav-link" to="/">Home</Link>
+          {user ? (
+            <>
+              <Link className="nav-link" to="/dashboard">Dashboard</Link>
+              <Link className="nav-link" to="/courses">Courses</Link>
+            </>
+          ) : (
+            <>
+              <Link className="nav-link" to="/login">Login</Link>
+              <Link className="nav-link" to="/register">Register</Link>
+              <Link className="nav-link" to="/courses">Courses</Link>
+            </>
+          )}
+        </div>
+      </nav>
+    </header>
+  );
+};
 
 function App() {
   return (
-    <div className="faded-background">
+    <AuthProvider>
+      <div className="faded-background">
         <Router>
-          <header className="header">
-            <nav className="navbar">
-              <div className="logo">Skillbook</div>
-              <div>
-                <Link className="nav-link" to="/">Home</Link>
-                <Link className="nav-link" to="/login">Login</Link>
-                <Link className="nav-link" to="/register">Register</Link>
-                <Link className="nav-link" to="/courses">Courses</Link>
-              </div>
-            </nav>
-          </header>
-
+          <Navigation />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
@@ -30,6 +48,7 @@ function App() {
           </Routes>
         </Router>
       </div>
+    </AuthProvider>
   );
 }
 

@@ -1,61 +1,106 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import "./Login.css";
+import { useAuth } from '../../context/AuthContext';
+import '../../styles/shared.css';
+import './Login.css';
 
-function Login() {
-  const [formData, setFormData] = useState({ username: "", password: "" });
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
+const Login = () => {
+    const navigate = useNavigate();
+    const { login } = useAuth();
+    const [formData, setFormData] = useState({
+        username: '',
+        password: ''
+    });
+    const [error, setError] = useState('');
 
-  const handleChange = (e) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
 
-    try {
-      const response = await axios.post("http://localhost:8080/api/login", formData, {
-        withCredentials: true,
-      });
-      console.log("Login success:", response.data);
-      navigate("/dashboard");
-    } catch (err) {
-      setError("Invalid credentials. Please try again.");
-    }
-  };
+        try {
+            const response = await fetch('http://localhost:8080/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify(formData)
+            });
 
-  return (
-    <div className="login-container">
-      <form className="login-form" onSubmit={handleSubmit}>
-        <h2>Login</h2>
+            const data = await response.text();
 
-        <input
-          type="text"
-          name="username"
-          placeholder="Username or Email"
-          value={formData.username}
-          onChange={handleChange}
-          required
-        />
+            if (response.ok) {
+                // Set the user data in the auth context
+                login({
+                    username: formData.username,
+                    // Add other user data as needed
+                });
+                navigate('/dashboard');
+            } else {
+                setError(data || 'Login failed. Please check your credentials.');
+            }
+        } catch (err) {
+            console.error('Login error:', err);
+            setError('Network error occurred. Please try again.');
+        }
+    };
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
+    return (
+        <div className="page-container">
+            <div className="content-card">
+                <h2>Welcome Back!</h2>
+                {error && <div className="error-message">{error}</div>}
+                
+                <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <label htmlFor="username">Username</label>
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            value={formData.username}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
 
-        {error && <p className="login-error">{error}</p>}
+                    <div className="form-group">
+                        <label htmlFor="password">Password</label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
 
-        <button type="submit">Login</button>
-      </form>
-    </div>
-  );
-}
+                    <button type="submit" className="primary-button">
+                        Log In
+                    </button>
+
+                    <p className="text-center mt-1">
+                        Don't have an account?{' '}
+                        <span 
+                            className="link-text"
+                            onClick={() => navigate('/register')}
+                        >
+                            Register here
+                        </span>
+                    </p>
+                </form>
+            </div>
+        </div>
+    );
+};
 
 export default Login;

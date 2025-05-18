@@ -70,3 +70,75 @@
     color: #1d6322;
   }
   
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.profile-section {
+    background: #f7fafc;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.profile-photo {
+    width: 150px;
+    height: 150px;
+    background: #e2e8f0;
+    border-radius: 50%;
+    margin: 0 auto 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #718096;
+    font-size: 0.875rem;
+}
+
+.profile-info p {
+    margin: 0.75rem 0;
+    color: #4a5568;
+}
+
+.courses-section h3 {
+    color: #2d3748;
+    margin-bottom: 1.5rem;
+}
+
+.courses-list {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.course-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+}
+
+.course-card h4 {
+    color: #2c5282;
+    margin: 0 0 0.75rem 0;
+}
+
+.course-card p {
+    color: #4a5568;
+    margin: 0.5rem 0;
+}
+
+.course-card .instructor {
+    color: #718096;
+    font-size: 0.875rem;
+    margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+  
