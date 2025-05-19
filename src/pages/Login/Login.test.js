@@ -52,6 +52,9 @@ describe('Login Component', () => {
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: false,
+        headers: new Headers({
+          'content-type': 'text/plain'
+        }),
         text: () => Promise.resolve('Invalid credentials')
       })
     );
@@ -91,7 +94,7 @@ describe('Login Component', () => {
     fireEvent.click(loginButton);
 
     await waitFor(() => {
-      expect(fetch).toHaveBeenCalledWith('http://localhost:8080/login', expect.any(Object));
+      expect(fetch).toHaveBeenCalledWith('http://localhost:8080/api/auth/login', expect.any(Object));
     });
   });
 }); 

@@ -1,9 +1,20 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 const Navigation = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = (e) => {
+    e.preventDefault();
+    // Clear the JWT token from localStorage
+    localStorage.removeItem('token');
+    // Clear the auth context
+    logout();
+    // Redirect to home page
+    navigate('/');
+  };
 
   return (
     <header className="header">
@@ -15,6 +26,7 @@ const Navigation = () => {
             <>
               <Link className="nav-link" to="/dashboard">Dashboard</Link>
               <Link className="nav-link" to="/courses">Courses</Link>
+              <Link className="nav-link" to="/" onClick={handleLogout}>Logout</Link>
             </>
           ) : (
             <>

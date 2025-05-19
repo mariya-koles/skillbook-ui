@@ -22,7 +22,7 @@ const Login = () => {
         }));
     };
 
-    const [password, setPassword] = useState('');
+
     const [showPassword, setShowPassword] = useState(false);
 
     const handleSubmit = async (e) => {
@@ -30,7 +30,7 @@ const Login = () => {
         setError('');
 
         try {
-            const response = await fetch('http://localhost:8080/login', {
+            const response = await fetch('http://localhost:8080/api/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -39,17 +39,29 @@ const Login = () => {
                 body: JSON.stringify(formData)
             });
 
-            const data = await response.text();
+            let data;
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                data = await response.json();
+            } else {
+                data = await response.text();
+            }
 
             if (response.ok) {
+                // Store JWT token if present
+                if (data.token) {
+                    localStorage.setItem('token', data.token);
+                }
                 // Set the user data in the auth context
                 login({
                     username: formData.username,
-                    // Add other user data as needed
+                    // Optionally: ...data.user or other fields
                 });
                 navigate('/dashboard');
             } else {
-                setError(data || 'Login failed. Please check your credentials.');
+                // Handle both JSON and text error messages
+                const errorMessage = typeof data === 'object' ? data.message : data;
+                setError(errorMessage || 'Login failed. Please check your credentials.');
             }
         } catch (err) {
             console.error('Login error:', err);
