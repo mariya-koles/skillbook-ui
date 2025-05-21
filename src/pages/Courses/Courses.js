@@ -8,7 +8,7 @@ const Courses = () => {
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    const { user } = useAuth();
+    const { user, login } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -40,6 +40,41 @@ const Courses = () => {
 
     const handleCourseClick = (courseId) => {
         navigate(`/courses/${courseId}`);
+    };
+
+    // Helper to check if user is enrolled in a course
+    const isUserEnrolled = (courseId) => {
+        if (!user || !user.enrolledCourses) return false;
+        return user.enrolledCourses.some(enrolled => enrolled.id === courseId);
+    };
+
+    // Enroll handler
+    const handleEnroll = async (e, course) => {
+        e.stopPropagation();
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`http://localhost:8080/courses/${course.id}/enroll`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            if (response.ok) {
+                // Optimistically update user context
+                const updatedUser = {
+                    ...user,
+                    enrolledCourses: [...(user.enrolledCourses || []), { id: course.id }]
+                };
+                login(updatedUser); // update context
+                // Optionally show a success message
+            } else {
+                // Optionally show an error message
+                console.error('Failed to enroll in course');
+            }
+        } catch (err) {
+            console.error('Error enrolling in course:', err);
+        }
     };
 
     if (loading) {
@@ -90,12 +125,10 @@ const Courses = () => {
                                     {user && (
                                         <button 
                                             className="enroll-button"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                // TODO: Implement enrollment functionality
-                                            }}
+                                            disabled={isUserEnrolled(course.id)}
+                                            onClick={(e) => handleEnroll(e, course)}
                                         >
-                                            Enroll Now
+                                            {isUserEnrolled(course.id) ? 'Enrolled' : 'Enroll Now'}
                                         </button>
                                     )}
                                 </div>
