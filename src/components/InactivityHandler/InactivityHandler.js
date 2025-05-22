@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import Modal from '../Modal/Modal';
 import { useAuth } from '../../context/AuthContext';
 
