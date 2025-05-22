@@ -8,6 +8,7 @@ const WARNING_TIME_MS = 5 * 60 * 1000; // 5 minutes
 const InactivityHandler = ({ children }) => {
   const { logout } = useAuth();
   const [showWarning, setShowWarning] = useState(false);
+  const [warningDismissed, setWarningDismissed] = useState(false);
   const warningTimeout = useRef();
   const logoutTimeout = useRef();
 
@@ -66,6 +67,7 @@ const InactivityHandler = ({ children }) => {
   useEffect(() => {
     const activityHandler = () => {
       setShowWarning(false);
+      setWarningDismissed(false);
       setupTimers();
     };
     const events = ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart'];
@@ -82,8 +84,8 @@ const InactivityHandler = ({ children }) => {
   return (
     <>
       <Modal
-        isOpen={showWarning}
-        onClose={() => setShowWarning(false)}
+        isOpen={showWarning && !warningDismissed}
+        onClose={() => setWarningDismissed(true)}
         title="Inactivity Warning"
         message="Your session will soon expire and you will be logged out."
         buttonText="OK"
