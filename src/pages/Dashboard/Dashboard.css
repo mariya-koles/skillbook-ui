@@ -156,4 +156,77 @@
   background: #f7fafc;
   color: #2d3748;
 }
+
+.update-profile-btn {
+  margin-top: 1rem;
+  padding: 0.5rem 1.5rem;
+  background-color: #3182ce;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.update-profile-btn:hover {
+  background-color: #2563eb;
+}
+
+.update-profile-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.update-profile-form .form-row {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.update-profile-form label {
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+.update-profile-form input[type="text"],
+.update-profile-form input[type="email"],
+.update-profile-form input[type="password"] {
+  width: 250px;
+  padding: 0.5rem;
+  border: 1.5px solid #b5b5b5 !important;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+  background: #fff !important;
+  color: #2d3748;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.update-profile-form input[type="text"]:focus,
+.update-profile-form input[type="email"]:focus,
+.update-profile-form input[type="password"]:focus {
+  border-color: #3182ce !important;
+  outline: none;
+}
+
+/* Fix for Chrome autofill */
+.update-profile-form input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #fff inset !important;
+  box-shadow: 0 0 0 1000px #fff inset !important;
+  border: 1.5px solid #b5b5b5 !important;
+}
+
+.update-profile-form input[type="file"] {
+  margin-top: 0.5rem;
+}
+
+.update-profile-form .primary-button {
+  width: 100%;
+  margin-top: 1rem;
+}
   

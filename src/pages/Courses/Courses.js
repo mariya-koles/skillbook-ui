@@ -61,15 +61,13 @@ const Courses = () => {
                 }
             });
             if (response.ok) {
-                // Optimistically update user context
-                const updatedUser = {
-                    ...user,
-                    enrolledCourses: [...(user.enrolledCourses || []), { id: course.id }]
-                };
-                login(updatedUser); // update context
-                // Optionally show a success message
+                // Fetch updated user profile
+                const profileRes = await fetch('http://localhost:8080/users/me', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const updatedUser = await profileRes.json();
+                login(updatedUser); // update context with full user info
             } else {
-                // Optionally show an error message
                 console.error('Failed to enroll in course');
             }
         } catch (err) {
