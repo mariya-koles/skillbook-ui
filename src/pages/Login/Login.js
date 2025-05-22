@@ -51,13 +51,16 @@ const Login = () => {
                 // Store JWT token if present
                 if (data.token) {
                     localStorage.setItem('token', data.token);
+                    // Fetch user profile
+                    const profileRes = await fetch('http://localhost:8080/users/me', {
+                        headers: { 'Authorization': `Bearer ${data.token}` }
+                    });
+                    const userProfile = await profileRes.json();
+                    login(userProfile); // Store full user in context
+                    navigate('/dashboard');
+                } else {
+                    setError('Login failed: No token received.');
                 }
-                // Set the user data in the auth context
-                login({
-                    username: formData.username,
-                    // Optionally: ...data.user or other fields
-                });
-                navigate('/dashboard');
             } else {
                 // Handle both JSON and text error messages
                 const errorMessage = typeof data === 'object' ? data.message : data;

@@ -141,4 +141,19 @@
         grid-template-columns: 1fr;
     }
 }
+
+.courses-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+.courses-table th, .courses-table td {
+  border: 1px solid #e2e8f0;
+  padding: 0.75rem;
+  text-align: left;
+}
+.courses-table th {
+  background: #f7fafc;
+  color: #2d3748;
+}
   
