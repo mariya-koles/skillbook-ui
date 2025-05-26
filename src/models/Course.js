@@ -3,6 +3,7 @@ export class Course {
         id = null,
         title = '',
         description = '',
+        longDescription = '',
         category = '',
         durationMinutes = 0,
         instructor = null,
@@ -11,6 +12,7 @@ export class Course {
         this.id = id;
         this.title = title;
         this.description = description;
+        this.longDescription = longDescription;
         this.category = category;
         this.durationMinutes = durationMinutes;
         this.instructor = instructor;
@@ -23,6 +25,7 @@ export class Course {
             id: this.id,
             title: this.title,
             description: this.description,
+            longDescription: this.longDescription,
             category: this.category,
             durationMinutes: this.durationMinutes,
             instructor: this.instructor,
@@ -44,6 +47,7 @@ export class Course {
             json.id,
             json.title,
             json.description,
+            json.longDescription,
             json.category,
             json.durationMinutes,
             json.instructor,

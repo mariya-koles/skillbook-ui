@@ -16,6 +16,7 @@ const Register = () => {
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);        
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [passwordsMatch, setPasswordsMatch] = useState(true);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -23,6 +24,14 @@ const Register = () => {
             ...prevState,
             [name]: value
         }));
+        // Live check for password match
+        if (name === "password" || name === "confirmPassword") {
+            setPasswordsMatch(
+                name === "password"
+                    ? value === formData.confirmPassword
+                    : formData.password === value
+            );
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -30,7 +39,8 @@ const Register = () => {
         setError('');
 
         if (formData.password !== formData.confirmPassword) {
-            setError('Passwords do not match');
+            setError('Passwords must match');
+            setPasswordsMatch(false);
             return;
         }
 
@@ -104,6 +114,7 @@ const Register = () => {
                                 value={formData.password}
                                 onChange={handleChange}
                                 required
+                                style={!passwordsMatch ? { border: '1.5px solid #c53030' } : {}}
                             />
                             <span
                                 className="toggle-password"
@@ -124,6 +135,7 @@ const Register = () => {
                                 value={formData.confirmPassword}
                                 onChange={handleChange}
                                 required
+                                style={!passwordsMatch ? { border: '1.5px solid #c53030' } : {}}
                             />
                             <span
                                 className="toggle-password"
@@ -133,7 +145,6 @@ const Register = () => {
                             </span>
                         </div>
                     </div>
-
 
                     <div className="form-group">
                         <label htmlFor="role">I want to register as:</label>

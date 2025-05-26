@@ -98,7 +98,18 @@ const Courses = () => {
     return (
         <div className="page-container">
             <div className="content-card">
-                <h2>Available Courses</h2>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <h2>Available Courses</h2>
+                    {user?.role === 'INSTRUCTOR' && (
+                        <button
+                            className="create-course-button"
+                            style={{ background: '#48bb78', color: 'white', padding: '0.75rem 1.5rem', border: 'none', borderRadius: '5px', fontWeight: 600, fontSize: '1rem', cursor: 'pointer' }}
+                            onClick={() => navigate('/courses/create')}
+                        >
+                            Create a Course
+                        </button>
+                    )}
+                </div>
                 <div className="courses-grid">
                     {courses.length > 0 ? (
                         courses.map(course => (
@@ -120,7 +131,7 @@ const Courses = () => {
                                         <span className="duration">Duration: {course.getFormattedDuration()}</span>
                                         <span className="start-time">Starts: {course.getFormattedStartTime()}</span>
                                     </div>
-                                    {user && (
+                                    {user && user.role !== 'INSTRUCTOR' && (
                                         <button 
                                             className="enroll-button"
                                             disabled={isUserEnrolled(course.id)}

@@ -1,0 +1,92 @@
+.course-details-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  max-width: 600px;
+  margin: 2rem auto;
+}
+
+.course-details-card h2 {
+  color: #2d3748;
+  margin-bottom: 1rem;
+}
+
+.course-details-card .course-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  color: #718096;
+}
+
+.course-details-card .course-description {
+  color: #4a5568;
+  margin-bottom: 1.5rem;
+}
+
+.course-details-card h4 {
+  margin-bottom: 0.5rem;
+  color: #2c5282;
+}
+
+.course-details-card button.enroll-button {
+  width: 100%;
+  padding: 0.75rem;
+  background: #4299e1;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  margin-bottom: 1rem;
+}
+
+.course-details-card button.enroll-button:disabled {
+  background: #a0aec0;
+  cursor: not-allowed;
+}
+
+.course-details-card button.back-button {
+  width: 100%;
+  padding: 0.75rem;
+  background: #48bb78;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  margin-top: 1rem;
+}
+
+.course-details-card button.back-button:hover {
+  background: #38a169;
+}
+
+.course-details-card.wide {
+  max-width: 1000px;
+}
+
+.long-description-section {
+  margin-top: 2rem;
+}
+
+.long-description-section h3 {
+  font-size: 1.25rem;
+  color: #2c5282;
+  margin-bottom: 0.75rem;
+}
+
+.long-description-content {
+  background: #f7fafc;
+  border-radius: 6px;
+  padding: 1.25rem;
+  color: #2d3748;
+  font-size: 1.05rem;
+  min-height: 120px;
+  white-space: pre-line;
+} 

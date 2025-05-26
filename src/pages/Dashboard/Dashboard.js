@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import './Dashboard.css';
 import Modal from '../../components/Modal/Modal'; // Adjust path if needed
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
     const { user, login } = useAuth();
@@ -16,6 +17,7 @@ const Dashboard = () => {
     });
     const [isDirty, setIsDirty] = useState(false);
     const [saveStatus, setSaveStatus] = useState('Save');
+    const navigate = useNavigate();
 
     // Track changes to formData
     useEffect(() => {
@@ -128,7 +130,9 @@ const Dashboard = () => {
                                     : user?.username}
                             </p>
                             <p><strong>Email:</strong> {user?.email}</p>
-                            <p><strong>Courses Enrolled:</strong> {user?.enrolledCourses?.length || 0}</p>
+                            <p>
+                                <strong>{user?.role === 'INSTRUCTOR' ? 'Courses Managed' : 'Courses Enrolled'}:</strong> {user?.enrolledCourses?.length || 0}
+                            </p>
                             <button className="update-profile-btn" onClick={() => setShowModal(true)}>
                                 Update
                             </button>
@@ -148,7 +152,7 @@ const Dashboard = () => {
                                 </thead>
                                 <tbody>
                                     {user.enrolledCourses.map(course => (
-                                        <tr key={course.id}>
+                                        <tr key={course.id} style={{ cursor: 'pointer' }} onClick={() => navigate(`/courses/${course.id}`)}>
                                             <td>{course.title}</td>
                                             <td>{course.description}</td>
                                             <td>{course.instructor ? `${course.instructor.firstName || ''} ${course.instructor.lastName || ''}`.trim() : ''}</td>
@@ -157,7 +161,7 @@ const Dashboard = () => {
                                 </tbody>
                             </table>
                         ) : (
-                            <p>No courses enrolled yet.</p>
+                            <p>{user?.role === 'INSTRUCTOR' ? 'No courses.' : 'No courses enrolled yet.'}</p>
                         )}
                     </div>
                 </div>
