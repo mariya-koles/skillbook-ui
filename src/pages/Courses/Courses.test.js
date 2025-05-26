@@ -1,123 +1,219 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import { AuthProvider } from '../../context/AuthContext';
 import Courses from './Courses';
+
+const mockNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate,
+}));
+
+// Mock the useAuth hook
+const mockUseAuth = jest.fn();
+jest.mock('../../context/AuthContext', () => ({
+  useAuth: () => mockUseAuth()
+}));
 
 // Mock fetch
 global.fetch = jest.fn();
 
-// Mock useNavigate
-const mockNavigate = jest.fn();
-jest.mock('react-router-dom', () => ({
-    ...jest.requireActual('react-router-dom'),
-    useNavigate: () => mockNavigate,
-}));
-
 const mockCourses = [
-    {
-        id: 1,
-        title: 'Introduction to React',
-        description: 'Learn the basics of React development',
-        instructor: 1,
-        duration: 90
-    },
-    {
-        id: 2,
-        title: 'Advanced JavaScript',
-        description: 'Deep dive into modern JavaScript concepts',
-        instructor: 2,
-        duration: 180
-    }
+  {
+    id: 1,
+    title: 'React Basics',
+    description: 'Learn React fundamentals',
+    category: 'Programming',
+    duration: 120,
+    startTime: '2024-01-15T10:00:00Z',
+    instructor: { firstName: 'Jane', lastName: 'Smith' }
+  },
+  {
+    id: 2,
+    title: 'Advanced JavaScript',
+    description: 'Master JavaScript concepts',
+    category: 'Programming',
+    duration: 180,
+    startTime: '2024-02-01T14:00:00Z',
+    instructor: { firstName: 'Bob', lastName: 'Johnson' }
+  }
 ];
 
-const renderCourses = (userState = null) => {
-    jest.spyOn(require('../../context/AuthContext'), 'useAuth').mockImplementation(() => ({
-        user: userState,
-        login: jest.fn(),
-        logout: jest.fn(),
-    }));
-
-    return render(
-        <BrowserRouter>
-            <AuthProvider>
-                <Courses />
-            </AuthProvider>
-        </BrowserRouter>
-    );
+const mockLearner = {
+  id: 1,
+  role: 'LEARNER',
+  enrolledCourses: []
 };
 
-describe('Courses Component', () => {
-    beforeEach(() => {
-        jest.clearAllMocks();
+const mockInstructor = {
+  id: 2,
+  role: 'INSTRUCTOR',
+  enrolledCourses: []
+};
+
+const renderWithAuth = (user) => {
+  mockUseAuth.mockReturnValue({
+    user,
+    login: jest.fn(),
+    logout: jest.fn()
+  });
+
+  return render(
+    <BrowserRouter>
+      <Courses />
+    </BrowserRouter>
+  );
+};
+
+describe('Courses', () => {
+  beforeEach(() => {
+    mockNavigate.mockClear();
+    fetch.mockClear();
+    mockUseAuth.mockClear();
+  });
+
+  test('renders courses list for learner', async () => {
+    fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockCourses
+    });
+    
+    renderWithAuth(mockLearner);
+    
+    await waitFor(() => {
+      expect(screen.getByText('React Basics')).toBeInTheDocument();
+      expect(screen.getByText('Advanced JavaScript')).toBeInTheDocument();
+    });
+  });
+
+  test('shows "Create a Course" button for instructor', async () => {
+    fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockCourses
+    });
+    
+    renderWithAuth(mockInstructor);
+    
+    await waitFor(() => {
+      expect(screen.getByText('Create a Course')).toBeInTheDocument();
+    });
+  });
+
+  test('does not show "Create a Course" button for learner', async () => {
+    fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockCourses
+    });
+    
+    renderWithAuth(mockLearner);
+    
+    await waitFor(() => {
+      expect(screen.queryByText('Create a Course')).not.toBeInTheDocument();
+    });
+  });
+
+  test('shows "Enroll Now" button for learner', async () => {
+    fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockCourses
+    });
+    
+    renderWithAuth(mockLearner);
+    
+    await waitFor(() => {
+      const enrollButtons = screen.getAllByText('Enroll Now');
+      expect(enrollButtons).toHaveLength(2); // One for each course
+    });
+  });
+
+  test('does not show "Enroll Now" button for instructor', async () => {
+    fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockCourses
+    });
+    
+    renderWithAuth(mockInstructor);
+    
+    await waitFor(() => {
+      expect(screen.queryByText('Enroll Now')).not.toBeInTheDocument();
+    });
+  });
+
+  test('navigates to course details when course title is clicked', async () => {
+    fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockCourses
+    });
+    
+    renderWithAuth(mockLearner);
+    
+    await waitFor(() => {
+      const courseTitle = screen.getByText('React Basics');
+      fireEvent.click(courseTitle);
+      expect(mockNavigate).toHaveBeenCalledWith('/courses/1');
+    });
+  });
+
+  test('navigates to create course when "Create a Course" is clicked', async () => {
+    fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockCourses
+    });
+    
+    renderWithAuth(mockInstructor);
+    
+    await waitFor(() => {
+      const createButton = screen.getByText('Create a Course');
+      fireEvent.click(createButton);
+      expect(mockNavigate).toHaveBeenCalledWith('/courses/create');
+    });
+  });
+
+  test('handles enrollment successfully', async () => {
+    const mockUpdatedUser = {
+      ...mockLearner,
+      enrolledCourses: [{ id: 1, title: 'React Basics' }]
+    };
+
+    // Mock courses fetch first, then enrollment API call
+    fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockCourses
+    });
+    fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockUpdatedUser
     });
 
-    test('shows loading state initially', () => {
-        renderCourses();
-        expect(screen.getByText('Loading courses...')).toBeInTheDocument();
+    renderWithAuth(mockLearner);
+    
+    await waitFor(() => {
+      const enrollButton = screen.getAllByText('Enroll Now')[0];
+      fireEvent.click(enrollButton);
     });
 
-    test('displays courses when data is loaded successfully', async () => {
-        global.fetch.mockResolvedValueOnce({
-            ok: true,
-            json: async () => mockCourses
-        });
-
-        renderCourses();
-        
-        await waitFor(() => {
-            expect(screen.getByText('Introduction to React')).toBeInTheDocument();
-            expect(screen.getByText('Advanced JavaScript')).toBeInTheDocument();
-        });
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledWith('http://localhost:8080/courses/1/enroll', expect.objectContaining({
+        method: 'POST'
+      }));
     });
+  });
 
-    test('shows error message when fetch fails', async () => {
-        global.fetch.mockRejectedValueOnce(new Error('Failed to fetch'));
-
-        renderCourses();
-        
-        await waitFor(() => {
-            expect(screen.getByText('Failed to load courses. Please try again later.')).toBeInTheDocument();
-        });
+  test('displays error message when courses fail to load', async () => {
+    // Clear the successful mock from beforeEach
+    fetch.mockClear();
+    fetch.mockRejectedValueOnce(new Error('Failed to fetch'));
+    
+    renderWithAuth(mockLearner);
+    
+    await waitFor(() => {
+      expect(screen.getByText('Failed to load courses. Please try again later.')).toBeInTheDocument();
     });
+  });
 
-    test('shows enroll button for authenticated users', async () => {
-        global.fetch.mockResolvedValueOnce({
-            ok: true,
-            json: async () => mockCourses
-        });
-
-        renderCourses({ username: 'testuser' });
-        
-        await waitFor(() => {
-            const enrollButtons = screen.getAllByText('Enroll Now');
-            expect(enrollButtons).toHaveLength(2);
-        });
-    });
-
-    test('does not show enroll button for unauthenticated users', async () => {
-        global.fetch.mockResolvedValueOnce({
-            ok: true,
-            json: async () => mockCourses
-        });
-
-        renderCourses();
-        
-        await waitFor(() => {
-            expect(screen.queryByText('Enroll Now')).not.toBeInTheDocument();
-        });
-    });
-
-    test('shows no courses message when courses array is empty', async () => {
-        global.fetch.mockResolvedValueOnce({
-            ok: true,
-            json: async () => []
-        });
-
-        renderCourses();
-        
-        await waitFor(() => {
-            expect(screen.getByText('No courses available at the moment.')).toBeInTheDocument();
-        });
-    });
+  test('shows loading state initially', () => {
+    renderWithAuth(mockLearner);
+    
+    expect(screen.getByText('Loading courses...')).toBeInTheDocument();
+  });
 }); 
